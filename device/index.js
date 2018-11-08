@@ -836,9 +836,9 @@ function DeviceClient(options) {
             });
          }
       } else {
-         if (offlineQueueing === true || !_filling()) {
+//         if (offlineQueueing === true || !_filling()) {
             device.publish(topic, message, options, callback);
-         }
+//         }
       }
    };
    this.subscribe = function(topics, options, callback) {
