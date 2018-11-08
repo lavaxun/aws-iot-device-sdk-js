@@ -1,3 +1,38 @@
+# Initiative
+The existing aws-iot-device-sdk does not allow persistent storage for offline queue.
+This fork is aimed to fix and to provide a Proof-of-Concept for enabling persistent queue in AWS IOT SDK (JS).
+
+
+# Sample Code
+We MUST use `qos: 1` in the `.publish(payload, pubOpts)` in order to have the persistent queue functioniong properly.
+
+```js
+var awsIot = require('aws-iot-device-sdk');
+var levelStore = require('mqtt-level-store');
+var levelManager = levelStore(<PathToYourFolderForLevelDB>);
+
+var device = awsIot.device({
+  incomingStore: levelManager.incoming,
+  outgoingStore: levelManager.outgoing,
+  keyPath: <PathToYourAwsIoTPrivateKey>,
+  certPath: <PathToYourAwsIoTCert>,
+  caPath: <PathToYourAwsIoTCA>,
+  clientId: <YourDeviceId>,
+  host: <YourAwsIoTEndpoint>,
+  offlineQueueing: false,
+  port: 8883,
+  //	debug: true,
+});
+
+var pubOpts = { qos: 1 };
+var payload = { some: 'payload', key: 'value' };
+
+// to publish payload
+device.publish('test/from_aws_console', JSON.stringify(payload), pubOpts);
+
+```
+
+
 # AWS IoT SDK for JavaScript
 The aws-iot-device-sdk.js package allows developers to write JavaScript 
 applications which access the AWS IoT Platform via [MQTT or MQTT over the Secure WebSocket Protocol](http://docs.aws.amazon.com/iot/latest/developerguide/protocols.html).  It can be used in Node.js environments as well as in browser applications.
