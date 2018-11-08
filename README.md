@@ -4,7 +4,7 @@ This fork is aimed to fix and to provide a Proof-of-Concept for enabling persist
 
 
 # Sample Code
-We MUST use `qos: 1` in the `.publish(payload, pubOpts)` in order to have the persistent queue functioniong properly.
+We MUST use `offlineQueueing: false` in the AWS IOT settings and `qos: 1` in the `.publish(payload, pubOpts)` in order to have the persistent queue functioniong properly.
 
 ```js
 var awsIot = require('aws-iot-device-sdk');
@@ -19,12 +19,12 @@ var device = awsIot.device({
   caPath: <PathToYourAwsIoTCA>,
   clientId: <YourDeviceId>,
   host: <YourAwsIoTEndpoint>,
-  offlineQueueing: false,
+  offlineQueueing: false, // <-- it has to be 'false'
   port: 8883,
   //	debug: true,
 });
 
-var pubOpts = { qos: 1 };
+var pubOpts = { qos: 1 }; // <-- it has to be 'qos: 1'
 var payload = { some: 'payload', key: 'value' };
 
 // to publish payload
